@@ -1,0 +1,9 @@
+torch
+torchtext
+numpy
+pandas
+scikit-learn
+tqdm
+networkx==2.8.8
+onnx
+onnxscript

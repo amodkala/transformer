@@ -1,13 +1,18 @@
 import torch
+import numpy as np
 
 from tqdm import tqdm
 from torch import nn
 from torch.utils.data import DataLoader
 from sklearn.utils.class_weight import compute_class_weight
 
+from model import TransformerClassifier, get_model
+from data import get_training_data
+from export import export_onnx
+
 def train(model, dataset, labels, device):
 
-    batch_size = 16
+    batch_size = 64
 
     dl = DataLoader(
             dataset, 
@@ -68,12 +73,14 @@ def train(model, dataset, labels, device):
 
     model.eval()
 
+    torch.save(model.state_dict(), "classifier.pth")
+
     return model
 
 if __name__ == "__main__":
 
     model, vocab, device = get_model()
 
-    labels, dataset = get_training_data("training_data.csv", device)
+    labels, dataset = get_training_data("training_data.csv", vocab)
 
     model = train(model, dataset, labels, device)

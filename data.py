@@ -1,14 +1,17 @@
 import torch
+import torchtext; torchtext.disable_torchtext_deprecation_warning()
 import pandas as pd
 import torch.nn.functional as F
 
 from torchtext.data import get_tokenizer
+from torch.utils.data import Dataset
+
 
 class ReviewDataset(Dataset):
     def __init__(self, texts, labels, vocab, max_len=200):
         assert len(texts) == len(labels)
-        self.labels = labels
         self.texts = [torch.tensor([vocab[token] for token in text], dtype=torch.long) for text in texts]
+        self.labels = labels
         self.max_len = max_len if max_len is not None else max(len(t) for t in self.texts)
 
     def __len__(self):
